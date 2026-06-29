@@ -31,15 +31,25 @@ app.post(
 
 app.get("/", async () => {
   const res = await db
-    .selectDistinct({
-      name: askBoxTable.showName ? askBoxTable.name : {},
-      ip: askBoxTable.showIP ? askBoxTable.ip : {},
+    .select({
+      name: askBoxTable.name,
+      showName: askBoxTable.showName,
+      ip: askBoxTable.ip,
+      showIP: askBoxTable.showIP,
       question: askBoxTable.question,
       answer: askBoxTable.answer,
+      askedAt: askBoxTable.askedAt,
+      answeredAt: askBoxTable.answeredAt,
     })
     .from(askBoxTable)
     .where(eq(askBoxTable.public, 1));
-  return res;
+  return res.map((item) => ({
+    ...item,
+    question: item.question || "",
+    answer: item.answer || "",
+    askedAt: item.askedAt,
+    answeredAt: item.answeredAt !== 0 ? item.answeredAt : undefined,
+  }));
 });
 
 export { app as RouteAskBox };
