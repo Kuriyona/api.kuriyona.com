@@ -2,3 +2,4 @@
 .env
 prompt.md
 *.sqlite
+/dist

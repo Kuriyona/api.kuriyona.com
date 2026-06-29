@@ -1,10 +1,10 @@
 import { Elysia, t } from "elysia";
-import { RouterR2 } from "./router/r2";
-import { RouteWeather } from "./router/weather";
+import { RouterR2 } from "./src/router/r2";
+import { RouteWeather } from "./src/router/weather";
 import { cors } from "@elysiajs/cors";
 import { jwt } from "@elysia/jwt";
-import { RouteNekoApi } from "./router/neko";
-import { verifyTurnstile } from "./utils";
+import { RouteNekoApi } from "./src/router/neko";
+import { verifyTurnstile } from "./src/utils";
 import { drizzle } from "drizzle-orm/bun-sqlite";
 
 const db = drizzle(process.env.DB_FILE_NAME!);
