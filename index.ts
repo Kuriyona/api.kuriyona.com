@@ -5,9 +5,7 @@ import { cors } from "@elysiajs/cors";
 import { jwt } from "@elysia/jwt";
 import { RouteNekoApi } from "./src/router/neko";
 import { verifyTurnstile } from "./src/utils";
-import { drizzle } from "drizzle-orm/bun-sqlite";
-
-const db = drizzle(process.env.DB_FILE_NAME!);
+import { RouteAskBox } from "./src/router/ask-box";
 
 const app = new Elysia()
   .use(
@@ -25,6 +23,7 @@ const app = new Elysia()
   .use(RouterR2)
   .use(RouteWeather)
   .use(RouteNekoApi)
+  .use(RouteAskBox)
   .get(
     "/turnstile",
     async ({ jwt, query: { token } }) => {

@@ -2,7 +2,8 @@
   "scripts": {
     "run": "bun index.ts",
     "dev": "bun --watch index.ts",
-    "build": "bun build --target=bun index.ts --outfile ./dist/backend.js --minify"
+    "build": "bun build --target=bun index.ts --outfile ./dist/backend.js --minify",
+    "orm-push": "pnpm drizzle-kit push"
   },
   "dependencies": {
     "@elysia/jwt": "^1.4.2",
