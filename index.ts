@@ -1,35 +1,38 @@
-import { Elysia, t } from 'elysia';
-import { RouterR2 } from './router/r2';
-import { RouteWeather } from './router/weather';
-import { cors } from '@elysiajs/cors';
-import { jwt } from '@elysia/jwt';
-import { RouteNekoApi } from './router/neko';
-import { verifyTurnstile } from './utils';
+import { Elysia, t } from "elysia";
+import { RouterR2 } from "./router/r2";
+import { RouteWeather } from "./router/weather";
+import { cors } from "@elysiajs/cors";
+import { jwt } from "@elysia/jwt";
+import { RouteNekoApi } from "./router/neko";
+import { verifyTurnstile } from "./utils";
+import { drizzle } from "drizzle-orm/bun-sqlite";
+
+const db = drizzle(process.env.DB_FILE_NAME!);
 
 const app = new Elysia()
   .use(
     cors({
-      origin: '*',
+      origin: "*",
     }),
   )
   .use(
     jwt({
-      name: 'jwt',
+      name: "jwt",
       secret: process.env.JWT_SECRET!,
     }),
   )
-  .get('/', () => 'This API site of Kuriyona.com')
+  .get("/", () => "This API site of Kuriyona.com")
   .use(RouterR2)
   .use(RouteWeather)
   .use(RouteNekoApi)
   .get(
-    '/turnstile',
+    "/turnstile",
     async ({ jwt, query: { token } }) => {
       const result = await verifyTurnstile(token);
       if (result) {
         const value = await jwt.sign({
           pass: true,
-          exp: '2h',
+          exp: "2h",
         });
         return value;
       }
@@ -43,4 +46,4 @@ const app = new Elysia()
   );
 
 app.listen(62802);
-console.log('Server is running on port 62802');
+console.log("Server is running on port 62802");
