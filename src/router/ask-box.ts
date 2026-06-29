@@ -17,6 +17,7 @@ app.use(
         showName: Number(body.showName),
         ip,
         showIP: Number(body.showIP),
+        question: body.question,
         public: 0,
       };
       await db.insert(askBoxTable).values(q);
