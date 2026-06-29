@@ -45,5 +45,5 @@ const app = new Elysia()
     },
   );
 
-app.listen(62802);
-console.log("Server is running on port 62802");
+app.listen(process.env.PORT || 62802);
+console.log(`Server is running on port ${process.env.PORT || 62802}`);
