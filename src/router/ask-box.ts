@@ -2,7 +2,7 @@ import Elysia, { t } from "elysia";
 import { askBoxTable } from "../db/schema";
 import { db } from "../utils";
 import { eq } from "drizzle-orm";
-import { validateJWT } from "../plugin/auth";
+import { validateAuth, validateJWT } from "../plugin/auth";
 import { push } from "../bot";
 
 const app = new Elysia({ prefix: "/ask-box" });
@@ -56,5 +56,32 @@ app.get("/", async () => {
     answeredAt: item.answeredAt !== 0 ? item.answeredAt : undefined,
   }));
 });
+
+app.use(
+  new Elysia()
+    .use(validateAuth)
+    .get("/admin", async () => {
+      const res = await db.select().from(askBoxTable);
+      return res;
+    })
+    .delete("/admin/:id", async ({ params }) => {
+      await db.delete(askBoxTable).where(eq(askBoxTable.id, Number(params.id)));
+      return { message: "Success" };
+    })
+    .put("/admin/:id/public/:isPublic", async ({ params }) => {
+      await db
+        .update(askBoxTable)
+        .set({ public: Number(params.isPublic) })
+        .where(eq(askBoxTable.id, Number(params.id)));
+      return { message: "Success" };
+    })
+    .put("/admin/:id/answer/:answer", async ({ params }) => {
+      await db
+        .update(askBoxTable)
+        .set({ answer: params.answer, answeredAt: Date.now() })
+        .where(eq(askBoxTable.id, Number(params.id)));
+      return { message: "Success" };
+    }),
+);
 
 export { app as RouteAskBox };
