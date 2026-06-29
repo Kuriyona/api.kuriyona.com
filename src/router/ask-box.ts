@@ -7,29 +7,31 @@ import { push } from "../bot";
 
 const app = new Elysia({ prefix: "/ask-box" });
 
-app.use(validateJWT).post(
-  "/",
-  async ({ body, headers }) => {
-    const ip = headers["x-forwarded-for"] || headers["x-real-ip"] || "127.0.0.1";
-    const q: typeof askBoxTable.$inferInsert = {
-      name: body.name,
-      showName: Number(body.showName),
-      ip,
-      showIP: Number(body.showIP),
-      public: 0,
-    };
-    await db.insert(askBoxTable).values(q);
-    push(`New question from ${body.name}: ${body.question}`);
-    return { message: "Success" };
-  },
-  {
-    body: t.Object({
-      name: t.String(),
-      showName: t.Boolean(),
-      showIP: t.Boolean(),
-      question: t.String(),
-    }),
-  },
+app.use(
+  new Elysia().use(validateJWT).post(
+    "/",
+    async ({ body, headers }) => {
+      const ip = headers["x-forwarded-for"] || headers["x-real-ip"] || "127.0.0.1";
+      const q: typeof askBoxTable.$inferInsert = {
+        name: body.name,
+        showName: Number(body.showName),
+        ip,
+        showIP: Number(body.showIP),
+        public: 0,
+      };
+      await db.insert(askBoxTable).values(q);
+      push(`New question from ${body.name}: ${body.question}`);
+      return { message: "Success" };
+    },
+    {
+      body: t.Object({
+        name: t.String(),
+        showName: t.Boolean(),
+        showIP: t.Boolean(),
+        question: t.String(),
+      }),
+    },
+  ),
 );
 
 app.get("/", async () => {
