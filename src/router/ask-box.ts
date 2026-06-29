@@ -1,6 +1,7 @@
 import Elysia, { t } from "elysia";
 import { askBoxTable } from "../db/schema";
 import { db } from "../utils";
+import { eq } from "drizzle-orm";
 
 const app = new Elysia({ prefix: "/ask-box" });
 
@@ -27,5 +28,18 @@ app.post(
     }),
   },
 );
+
+app.get("/", async () => {
+  const res = await db
+    .selectDistinct({
+      name: askBoxTable.showName ? askBoxTable.name : {},
+      ip: askBoxTable.showIP ? askBoxTable.ip : {},
+      question: askBoxTable.question,
+      answer: askBoxTable.answer,
+    })
+    .from(askBoxTable)
+    .where(eq(askBoxTable.public, 1));
+  return res;
+});
 
 export { app as RouteAskBox };

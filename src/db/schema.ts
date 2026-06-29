@@ -6,6 +6,7 @@ export const askBoxTable = sqliteTable("ask_table", {
   showName: int().notNull(),
   ip: text(),
   showIP: int().notNull(),
+  question: text(),
   answer: text(),
   public: int().notNull().default(0),
   createdAt: int().default(Date.now()),
