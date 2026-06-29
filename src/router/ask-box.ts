@@ -13,11 +13,12 @@ app.use(
     async ({ body, headers }) => {
       const ip = headers["x-forwarded-for"] || headers["x-real-ip"] || "127.0.0.1";
       const q: typeof askBoxTable.$inferInsert = {
-        name: body.name,
+        name: body.name.length > 0 ? body.name : undefined,
         showName: Number(body.showName),
         ip,
         showIP: Number(body.showIP),
         question: body.question,
+        note: body.note.length > 0 ? body.note : undefined,
         public: 0,
       };
       await db.insert(askBoxTable).values(q);
@@ -30,6 +31,7 @@ app.use(
         showName: t.Boolean(),
         showIP: t.Boolean(),
         question: t.String(),
+        note: t.String(),
       }),
     },
   ),
