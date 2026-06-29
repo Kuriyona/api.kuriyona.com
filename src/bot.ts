@@ -1,10 +1,10 @@
-import { Bot } from 'grammy';
+import { Bot } from "grammy";
 
 const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN!);
 
 const KURIYONA_ID = 7102464271;
 
-bot.command('start', (ctx) => ctx.reply('Welcome!\n' + `Your user id is ${ctx.from?.id || 'N/A'}`));
+bot.command("start", (ctx) => ctx.reply("Welcome!\n" + `Your user id is ${ctx.from?.id || "N/A"}`));
 
 bot.start();
 

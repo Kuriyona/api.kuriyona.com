@@ -6,6 +6,7 @@ import { jwt } from "@elysia/jwt";
 import { RouteNekoApi } from "./src/router/neko";
 import { verifyTurnstile } from "./src/utils";
 import { RouteAskBox } from "./src/router/ask-box";
+import "./src/bot";
 
 const app = new Elysia()
   .use(

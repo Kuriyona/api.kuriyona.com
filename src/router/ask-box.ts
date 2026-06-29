@@ -3,6 +3,7 @@ import { askBoxTable } from "../db/schema";
 import { db } from "../utils";
 import { eq } from "drizzle-orm";
 import { validateJWT } from "../plugin/auth";
+import { push } from "../bot";
 
 const app = new Elysia({ prefix: "/ask-box" });
 
@@ -18,6 +19,7 @@ app.use(validateJWT).post(
       public: 0,
     };
     await db.insert(askBoxTable).values(q);
+    push(`New question from ${body.name}: ${body.question}`);
     return { message: "Success" };
   },
   {
