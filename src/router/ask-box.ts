@@ -20,6 +20,7 @@ app.use(
         question: body.question,
         note: body.note.length > 0 ? body.note : undefined,
         public: 0,
+        askedAt: Date.now(),
       };
       await db.insert(askBoxTable).values(q);
       push(`New question from ${body.name}: ${body.question}`);

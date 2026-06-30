@@ -10,6 +10,6 @@ export const askBoxTable = sqliteTable("ask_table", {
   answer: text(),
   note: text(),
   public: int().notNull().default(0),
-  askedAt: int().default(Date.now()),
+  askedAt: int(),
   answeredAt: int(),
 });
